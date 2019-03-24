@@ -1,6 +1,7 @@
 package main
 
 type Number struct {
+	Zeros  bool
 	Ones   int8
 	Twos   int8
 	Threes int8
@@ -13,10 +14,14 @@ type Number struct {
 }
 
 func FromInt64(n int64) Number {
-	num := Number{}
+	num := Number{
+		Zeros: n == 0,
+	}
 
 	for n > 0 {
 		switch n % 10 {
+		case 0:
+			num.Zeros = true
 		case 1:
 			num.Ones++
 		case 2:
@@ -50,6 +55,10 @@ func (n Number) MP() int64 {
 }
 
 func (n Number) Next() Number {
+	if n.Zeros {
+		return Number{Zeros: true}
+	}
+
 	result := pow(2, n.Twos)
 	result *= pow(3, n.Threes)
 	result *= pow(4, n.Fours)
