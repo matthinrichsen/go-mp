@@ -41,13 +41,15 @@ func FromInt64(n int64) Number {
 		case 9:
 			num.Nines++
 		}
+
 		n = n / 10
 	}
 	return num
 }
 
 func (n Number) MP() int64 {
-	depth := int64(1)
+	depth := int64(0)
+
 	for current := n; current.Length() > 1; depth++ {
 		current = current.Next()
 	}
@@ -56,7 +58,7 @@ func (n Number) MP() int64 {
 
 func (n Number) Next() Number {
 	if n.Zeros {
-		return Number{Zeros: true}
+		return FromInt64(0)
 	}
 
 	result := pow(2, n.Twos)
@@ -80,11 +82,19 @@ func (n Number) Length() int64 {
 	result += int64(n.Sevens)
 	result += int64(n.Eights)
 	result += int64(n.Nines)
+
+	if n.Zeros {
+		if result > 0 {
+			return 2
+		}
+		return 1
+	}
+
 	return result
 }
 
 func pow(n int64, count int8) int64 {
-	if count == 0 {
+	if count == 0 || n == 1 {
 		return 1
 	}
 
