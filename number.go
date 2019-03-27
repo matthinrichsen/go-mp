@@ -2,15 +2,15 @@ package main
 
 type Number struct {
 	Zeros  bool
-	Ones   int8
-	Twos   int8
-	Threes int8
-	Fours  int8
-	Fives  int8
-	Sixes  int8
-	Sevens int8
-	Eights int8
-	Nines  int8
+	Ones   int32
+	Twos   int32
+	Threes int32
+	Fours  int32
+	Fives  int32
+	Sixes  int32
+	Sevens int32
+	Eights int32
+	Nines  int32
 }
 
 func FromInt64(n int64) Number {
@@ -45,6 +45,81 @@ func FromInt64(n int64) Number {
 		n = n / 10
 	}
 	return num
+}
+
+func (n Number) ToInt() int64 {
+	result := int64(0)
+	for i := int32(0); i < n.Ones; i++ {
+		result *= 10
+		result += 1
+	}
+
+	for i := int32(0); i < n.Twos; i++ {
+		result *= 10
+		result += 2
+	}
+
+	for i := int32(0); i < n.Threes; i++ {
+		result *= 10
+		result += 3
+	}
+
+	for i := int32(0); i < n.Fours; i++ {
+		result *= 10
+		result += 4
+	}
+
+	for i := int32(0); i < n.Fives; i++ {
+		result *= 10
+		result += 5
+	}
+
+	for i := int32(0); i < n.Sixes; i++ {
+		result *= 10
+		result += 6
+	}
+
+	for i := int32(0); i < n.Sevens; i++ {
+		result *= 10
+		result += 7
+	}
+
+	for i := int32(0); i < n.Eights; i++ {
+		result *= 10
+		result += 8
+	}
+
+	for i := int32(0); i < n.Nines; i++ {
+		result *= 10
+		result += 9
+	}
+	return result
+}
+
+func (n Number) Add(digit int32) Number {
+	switch digit {
+	case 0:
+		n.Zeros = true
+	case 1:
+		n.Ones++
+	case 2:
+		n.Twos++
+	case 3:
+		n.Threes++
+	case 4:
+		n.Fours++
+	case 5:
+		n.Fives++
+	case 6:
+		n.Sixes++
+	case 7:
+		n.Sevens++
+	case 8:
+		n.Eights++
+	case 9:
+		n.Nines++
+	}
+	return n
 }
 
 func (n Number) MP() int64 {
@@ -93,13 +168,13 @@ func (n Number) Length() int64 {
 	return result
 }
 
-func pow(n int64, count int8) int64 {
+func pow(n int64, count int32) int64 {
 	if count == 0 || n == 1 {
 		return 1
 	}
 
 	result := n
-	for i := int8(1); i < count; i++ {
+	for i := int32(1); i < count; i++ {
 		result *= n
 	}
 
